@@ -65,7 +65,7 @@ class CountingHandler(ContentHandler):
 		row.add('nodeData','lat',self.nodeLat)
 		row.add('nodeData','lon',self.nodeLon)
 		if len(self.nodeTags) > 0:
-		   row.add('nodeData','tags',",".join("(%s,%s)" % tup for tup in self.nodeTags))
+		   row.add('nodeData','tags',"#".join("%s" for tag in self.nodeTags))
 		   self.nodeTags = []
 		nodesTable.put(row)
 		self.nodeId = 0
@@ -79,7 +79,7 @@ class CountingHandler(ContentHandler):
 		   row.add('wayData','nodes',self.wayNodes)
 		   self.wayNodes = []
 		if len(self.wayTags) > 0:
-		   row.add('wayData','wayTags', ",".join("(%s,%s)" % tup for tup in self.wayTags))
+		   row.add('wayData','wayTags', "#".join("(%s,%s)" % tup for tup in self.wayTags))
 		   self.wayTags = []
 		waysTable.put(row)
 		self.isWay = False		
