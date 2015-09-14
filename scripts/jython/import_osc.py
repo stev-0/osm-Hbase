@@ -9,19 +9,19 @@ from org.apache.hadoop.hbase.client import Get,Put,Delete
 
 class CountingHandler(ContentHandler):
     def __init__(self):
-        self.isModify = False
-        self.isCreate = False
-        self.isDelete = False
-	self.isWay = False
-	self.nodeId = 0
-	self.wayId = 0
-	self.nodeUser = ''
-	self.wayUser = ''
-	self.nodeTags = []
-	self.wayTags = []
-	self.wayNodes = []
-	self.nodeLat = 0.0
-	self.nodeLon = 0.0
+		self.isModify = False
+		self.isCreate = False
+		self.isDelete = False
+		self.isWay = False
+		self.nodeId = 0
+		self.wayId = 0
+		self.nodeUser = ''
+		self.wayUser = ''
+		self.nodeTags = []
+		self.wayTags = []
+		self.wayNodes = []
+		self.nodeLat = 0.0
+		self.nodeLon = 0.0
 
     def processElement(self,name,attrs):
     	if name == 'node':
@@ -67,33 +67,41 @@ class CountingHandler(ContentHandler):
 		if len(self.nodeTags) > 0:
 		   row.add('nodeData','tags',",".join("(%s,%s)" % tup for tup in self.nodeTags))
 		   self.nodeTags = []
-		table.put(row)
+		nodesTable.put(row)
 		self.nodeId = 0
 		self.nodeLat = 0.0
 		self.nodeLon = 0.0
 		self.isNode = False
 	if name == 'way':
-		print self.wayId
-		print self.wayUser
+		row = Put(self.wayId)
+		row.add('wayData','user',self.wayUser)
 		if len(self.wayNodes) > 0:
-		   print self.wayNodes
+		   row.add('wayData','nodes',self.wayNodes)
 		   self.wayNodes = []
 		if len(self.wayTags) > 0:
-		   print self.wayTags
+		   row.add('wayData','wayTags', ",".join("(%s,%s)" % tup for tup in self.wayTags))
 		   self.wayTags = []
+		waysTable.put(row)
 		self.isWay = False		
 
 def setupHbase(): 
-   admin = HBaseAdmin(conf) 
-   desc = HTableDescriptor(tablename) 
-   desc.addFamily(HColumnDescriptor("nodeData")) 
+   admin = HBaseAdmin(conf)
+   nodesDesc = HTableDescriptor(nodesTablename)
+   nodesDesc.addFamily(HColumnDescriptor("nodeData"))
+   waysDesc = HTableDescriptor(waysTablename)
+   waysDesc.addFamily(HColumnDescriptor("wayData"))
 
-   if admin.tableExists(tablename):
-      admin.disableTable(tablename) 
-      admin.deleteTable(tablename)
-   admin.createTable(desc)
-   global table 
-   table = HTable(conf, tablename)
+   if admin.tableExists(nodesTablename):
+      admin.disableTable(nodesTablename) 
+      admin.deleteTable(nodesTablename)
+   admin.createTable(nodesDesc)
+   if admin.tableExists(waysTablename):
+   	  admin.disableTable(waysTablename)
+   	  admin.deleteTable(waysTablename)
+   admin.createTable(waysTablename)
+   global nodesTable,waysTable 
+   nodesTable = HTable(conf, nodesTablename)
+   waysTable = HTable(conf, waysTablename)
 
 def main(argv=sys.argv):
    parser = make_parser()
@@ -104,6 +112,7 @@ def main(argv=sys.argv):
 
 if __name__ =='__main__':
     conf = HBaseConfiguration()
-    tablename = "nodesTest"    
+    nodesTablename = "nodesTest"
+    waysTablename = "waysTest"
     setupHbase()
     main()
