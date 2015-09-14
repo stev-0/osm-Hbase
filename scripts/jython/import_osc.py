@@ -98,7 +98,7 @@ def setupHbase():
    if admin.tableExists(waysTablename):
    	  admin.disableTable(waysTablename)
    	  admin.deleteTable(waysTablename)
-   admin.createTable(waysTablename)
+   admin.createTable(waysDesc)
    global nodesTable,waysTable 
    nodesTable = HTable(conf, nodesTablename)
    waysTable = HTable(conf, waysTablename)
