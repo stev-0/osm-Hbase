@@ -76,7 +76,7 @@ class CountingHandler(ContentHandler):
 		row = Put(self.wayId)
 		row.add('wayData','user',self.wayUser)
 		if len(self.wayNodes) > 0:
-		   row.add('wayData','nodes',"#".join("%s" for tag in self.wayNodes))
+		   row.add('wayData','nodes',"#".join("%s" % tag for tag in self.wayNodes))
 		   self.wayNodes = []
 		if len(self.wayTags) > 0:
 		   row.add('wayData','wayTags', "#".join("(%s,%s)" % tup for tup in self.wayTags))
