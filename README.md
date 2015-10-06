@@ -2,6 +2,7 @@
 Tools to import osm data into Hbase
 
 Use hbase shell to setup HBase with two tables, nodes and ways with one column family each
+
 `create ‘nodes’, ‘nodeData'`
 `create ‘ways’, ‘wayData'`
 
