@@ -6,7 +6,7 @@ Requirements
 
  - HBase >= 0.98
  - Pig >= 0.14
- - Jython = 2.7 if you want to use the change import scripts
+ - Jython = 2.7 if you want to use the change import scripts. To set this up on an HDP (Hortonworks cluster) use the script [here](https://github.com/stev-0/osm-Hbase/blob/master/scripts/setup/setupJython.sh)
  - [osmpbfinputformat](https://github.com/gballet/osmpbfinputformat) - compiled file also available from .....
 This has osmpbf as a dependency - this can be found in the lib directory of the above project
 
